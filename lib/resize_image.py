@@ -8,6 +8,12 @@ input_directory = sys.argv[1]
 output_directory = sys.argv[2]
 
 def resize_image(filename, input_directory=input_directory, output_directory=output_directory):
+    """
+    resize image from (width, height) to (x, 224) or (224, y) size and save it
+    :param filename: the name of the file
+    :param input_directory: directory of the image
+    :param output_directory: directory of the image resize
+    """
     img = cv2.imread(input_directory + filename)
     width = img.shape[1]
     height = img.shape[0]
