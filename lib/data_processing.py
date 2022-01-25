@@ -9,6 +9,7 @@ from multiprocessing import Pool
 import multiprocessing
 
 class Data_processing:
+  
   def __init__(self, csv_filename, data_dir, dataset_dir, train_test_validation_ratio=(0.75, 0.15, 0.1)):
     self.data = pd.read_csv(csv_filename)
     self.data_dir = data_dir
@@ -68,24 +69,24 @@ class Data_processing:
     :param validation_df: the validation DataFrame
     :param classes: list of classes
     """
-    create_dataset_dir(self.dataset_dir, classes)
+    self.create_dataset_dir(self.dataset_dir, classes)
     nb_train_data = self.train_df.shape[0]
     nb_test_data = self.test_df.shape[0]
     nb_validation_data = self.validation_df.shape[0]
     train_args = [(self.data_dir + '/' + self.train_df.iloc[i]["name"], 
                   self.dataset_dir + "/train/" + str(self.train_df.iloc[i]["TYPE"]) + '/' + self.train_df.iloc[i]["name"]) for i in range(nb_train_data)]
     test_args = [(self.data_dir + '/' + self.test_df.iloc[i]["name"], 
-                  dataset_dir + "/test/" + str(self.test_df.iloc[i]["TYPE"]) + '/' + self.test_df.iloc[i]["name"]) for i in range(nb_test_data)]
+                  self.dataset_dir + "/test/" + str(self.test_df.iloc[i]["TYPE"]) + '/' + self.test_df.iloc[i]["name"]) for i in range(nb_test_data)]
     validation_args = [(self.data_dir + '/' + self.validation_df.iloc[i]["name"], 
                         self.dataset_dir + "/validation/" + str(self.validation_df.iloc[i]["TYPE"]) + '/' + self.validation_df.iloc[i]["name"]) for i in range(nb_validation_data)]
     nb_cpu = multiprocessing.cpu_count()
     print(f"number of cpu: {nb_cpu}")
     with Pool(nb_cpu) as p:
-      p.map(copy_image, train_args)
+      p.map(self.copy_image, train_args)
     with Pool(nb_cpu) as p:
-      p.map(copy_image, test_args)
+      p.map(self.copy_image, test_args)
     with Pool(nb_cpu) as p:
-      p.map(copy_image, validation_args)
+      p.map(self.copy_image, validation_args)
     
   def __create_dataset_dir(self, classes):
     """
