@@ -3,17 +3,36 @@ import os
 import sys
 import cv2
 from multiprocessing import Pool
+import argparse
+
+def parse_args():
+    """
+    parse the arguments
+
+    :return: input and output filename
+    :rtype: string, string
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-i', '--input', help="input file", required=True)
+    parser.add_argument('-o', '--output', help="output file", required=True)
+    args = parser.parse_args()
+
+    input_filename = args.input
+    output_filename = args.output
+
+    return input_filename, output_filename
 
 input_directory = sys.argv[1]
 output_directory = sys.argv[2]
 
-def resize_image(filename, input_directory=input_directory, output_directory=output_directory):
+def resize_image(args):
     """
     resize image from (width, height) to (x, 224) or (224, y) size and save it
-    :param filename: the name of the file
-    :param input_directory: directory of the image
-    :param output_directory: directory of the image resize
+    :param args: tuple (filename, input_directory, output_directory) 
     """
+    filename = args[0]
+    input_directory = args[1]
+    output_directory = args[2]
     img = cv2.imread(input_directory + filename)
     width = img.shape[1]
     height = img.shape[0]
@@ -31,5 +50,7 @@ if __name__ == "__main__":
         print("usage: python3 resize_image.py {input} {output}")
         exit()
     nb_cpu = multiprocessing.cpu_count()
+    input_directory, output_directory = parse_args()
+    args = [(filename, input_directory, output_directory) for filename in os.listdir(input_directory)]
     with Pool(nb_cpu) as p:
-        p.map(resize_image, os.listdir(input_directory))
+        p.map(resize_image, args)

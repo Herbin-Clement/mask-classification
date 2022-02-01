@@ -10,9 +10,9 @@ import multiprocessing
 
 class Data_processing:
   
-  def __init__(self, csv_filename, data_dir, dataset_dir, train_test_validation_ratio=(0.75, 0.15, 0.1)):
+  def __init__(self, csv_filename, images_dir, dataset_dir, train_test_validation_ratio=(0.75, 0.15, 0.1)):
     self.data = pd.read_csv(csv_filename)
-    self.data_dir = data_dir
+    self.images_dir = images_dir
     self.dataset_dir = dataset_dir
     self.train_test_validation_ratio = train_test_validation_ratio
 
@@ -38,7 +38,7 @@ class Data_processing:
         self.test_df = self.test_df.append(self.data.iloc[i], ignore_index=True)
       else:
         self.validation_df = self.validation_df.append(self.data.iloc[i], ignore_index=True)
-    return (self.train_df, self.test_df, self.validation_df)
+    return self.train_df, self.test_df, self.validation_df
 
   def remove_set(self):
     """
@@ -73,11 +73,11 @@ class Data_processing:
     nb_train_data = self.train_df.shape[0]
     nb_test_data = self.test_df.shape[0]
     nb_validation_data = self.validation_df.shape[0]
-    train_args = [(self.data_dir + '/' + self.train_df.iloc[i]["name"], 
+    train_args = [(self.images_dir + '/' + self.train_df.iloc[i]["name"], 
                   self.dataset_dir + "/train/" + str(self.train_df.iloc[i]["TYPE"]) + '/' + self.train_df.iloc[i]["name"]) for i in range(nb_train_data)]
-    test_args = [(self.data_dir + '/' + self.test_df.iloc[i]["name"], 
+    test_args = [(self.images_dir + '/' + self.test_df.iloc[i]["name"], 
                   self.dataset_dir + "/test/" + str(self.test_df.iloc[i]["TYPE"]) + '/' + self.test_df.iloc[i]["name"]) for i in range(nb_test_data)]
-    validation_args = [(self.data_dir + '/' + self.validation_df.iloc[i]["name"], 
+    validation_args = [(self.images_dir + '/' + self.validation_df.iloc[i]["name"], 
                         self.dataset_dir + "/validation/" + str(self.validation_df.iloc[i]["TYPE"]) + '/' + self.validation_df.iloc[i]["name"]) for i in range(nb_validation_data)]
     nb_cpu = multiprocessing.cpu_count()
     print(f"number of cpu: {nb_cpu}")
