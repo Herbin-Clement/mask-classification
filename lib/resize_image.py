@@ -47,7 +47,7 @@ def resize_image(args):
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("usage: python3 resize_image.py {input} {output}")
+        print("usage: python3 resize_image.py --input {input_directory} --output {output_directory}")
         exit()
     nb_cpu = multiprocessing.cpu_count()
     input_directory, output_directory = parse_args()

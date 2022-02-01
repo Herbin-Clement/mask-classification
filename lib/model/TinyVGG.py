@@ -1,5 +1,9 @@
 from tensorflow.keras import Model
 from tensorflow.keras.layers import Dense, Flatten, Conv2D, MaxPool2D, Activation
+from tensorflow.keras.losses import CategoricalCrossentropy
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.metrics import CategoricalAccuracy
+from tensorflow.keras.metrics import Mean
 
 class TinyVGG(Model):
     def __init__(self):
@@ -34,3 +38,44 @@ class TinyVGG(Model):
 
         x = self.flatten(x)
         return final.fc(x)
+
+model = TinyVGG()
+loss_object = CategoricalCrossentropy()
+optimizer = Adam()
+
+train_accuracy = CategoricalAccuracy()
+test_accuracy = CategoricalAccuracy()
+
+train_mean_loss = Mean()
+test_mean_loss = Mean()
+
+@tf.function
+def train_step(image_batch, label_batch):
+    with tf.GradientTape() as tape:
+        predictions = model(images, training=True)
+        loss = loss_object(labels, predictions)
+    gradients = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+
+    train_loss(loss)
+    train_accuracy(labels, predictions)
+
+@tf.function
+def test_step(images, labels):
+    predictions = model(images, training=False)
+    t_loss = loss_object(labels, predictions)
+
+    test_loss(t_loss)
+    test_accuracy(labels, predictions)
+
+for epoch in range(5):
+    train_loss.reset_states()
+    train_accuracy.reset_states()
+    train_loss.reset_states()
+    train_accuracy.reset_states()
+
+    for images, labels in train_ds:
+        train_step(images, labels)
+
+    for test_images, test_labels in test_ds:
+        test_step(test_images, test_labels)
