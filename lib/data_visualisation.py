@@ -2,6 +2,8 @@ from random import randint
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import pandas as pd
+import tensorflow as tf 
+import numpy as np
 
 
 def displayRandomImage(df, image_directory):
@@ -45,3 +47,16 @@ def print_loss_accuracy(history):
   plt.title("Accuracy")
   plt.xlabel("Epochs")
   plt.legend()
+
+def predictImage(path_directory, model):
+  """
+  predict the class of an image
+  :param path_directory: str
+  :param model:model 
+  """
+  img_path = tf.keras.utils.get_file(origin=path_directory)
+  img = tf.keras.utils.load_img(img_path,  target_size=(224, 224))
+  img_array = tf.keras.utils.img_to_array(img)
+  img_array = tf.expand_dims(img_array, 0) 
+  predictions = model.predict(img_array)
+  print(np.argmax(predictions))
