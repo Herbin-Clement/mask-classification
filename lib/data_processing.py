@@ -5,8 +5,7 @@ import os
 import random
 import shutil
 from shutil import copy2
-from multiprocessing import Pool
-import multiprocessing
+from multiprocessing import Pool, cpu_count
 
 class Data_processing:
   
@@ -79,7 +78,7 @@ class Data_processing:
                   self.dataset_dir + "/test/" + str(self.test_df.iloc[i]["TYPE"]) + '/' + self.test_df.iloc[i]["name"]) for i in range(nb_test_data)]
     validation_args = [(self.images_dir + '/' + self.validation_df.iloc[i]["name"], 
                         self.dataset_dir + "/validation/" + str(self.validation_df.iloc[i]["TYPE"]) + '/' + self.validation_df.iloc[i]["name"]) for i in range(nb_validation_data)]
-    nb_cpu = multiprocessing.cpu_count()
+    nb_cpu = cpu_count()
     print(f"number of cpu: {nb_cpu}")
     with Pool(nb_cpu) as p:
       p.map(self.copy_image, train_args)
