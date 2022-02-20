@@ -1,4 +1,5 @@
 from ast import parse
+from json import load
 from logging import root
 import pandas as pd
 import os
@@ -21,7 +22,6 @@ def parse_args():
 if __name__ == "__main__":
     print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
     loadmodel = parse_args()
-
     root_dir = os.path.dirname(__file__) + "/"
     absolute_root_dir = os.path.abspath(root_dir)
 
@@ -37,6 +37,7 @@ if __name__ == "__main__":
     Model = Model.Model(root_dir, dataset_dir, batch_size=32)
 
     if loadmodel:
+        print("Je suis dans loadmodel", loadmodel)
         process_data.get_train_test_validation_csv()
         process_data.print_dataset_directory()
         Model.load_weights(root_dir + "Weights/TinyVGG/0/")
@@ -47,7 +48,8 @@ if __name__ == "__main__":
         Data_visualisation.predictImage(os.path.join(r"image_reduce_size\060002_4_028450_FEMALE_30.jpg"), model)
     
     else:
-        process_data.test_train_validation_split_from_csv()
+        # process_data.test_train_validation_split_from_csv()
+        process_data.get_train_test_validation_csv()
         process_data.create_train_test_validation_folder()
         process_data.print_dataset_directory()
         Model.fit_model()

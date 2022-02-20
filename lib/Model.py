@@ -73,7 +73,7 @@ class Model:
         )
 
     def load_weights(self, weights_dir):
-        self.model.load_weights(os.path.join(weights_dir, "/cp-0030.ckpt"))
+        self.model.load_weights(os.path.join(weights_dir, "cp-0030.ckpt"))
 
     def get_model(self):
         return self.model
