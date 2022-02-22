@@ -14,8 +14,7 @@ class Data_processing:
     def __init__(self, csv_filename, images_dir, dataset_dir, train_test_validation_ratio=(0.75, 0.15, 0.1)):
         self.data = pd.read_csv(csv_filename)
         self.images_dir = images_dir
-        tmp = len(list(os.walk(dataset_dir))[0][1])
-        self.dataset_dir = os.path.join(dataset_dir, f"{tmp}")
+        self.dataset_dir = dataset_dir
         self.train_test_validation_ratio = train_test_validation_ratio
         self.classes = self.data["TYPE"].unique()
         self.__create_dataset_dir()
@@ -118,6 +117,8 @@ class Data_processing:
             for c in self.classes:
                 os.makedirs(self.dataset_dir + '/' + e + '/' + str(c))
                 print(self.dataset_dir + '/' + e + '/' + str(c))
+
+        os.makedirs(os.path.join(self.dataset_dir, "weights"))
 
     def __copy_image(self, src_dst):
         """

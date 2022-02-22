@@ -7,13 +7,16 @@ import os
 
 class Model:
 
-    def __init__(self, root_dir, dataset_dir, batch_size=32):
+    def __init__(self, root_dir, dataset_dir, save_dir, batch_size=32):
         self.dataset_dir = dataset_dir
         self.train_dir = os.path.join(self.dataset_dir, "train") 
         self.test_dir = os.path.join(self.dataset_dir, "test")
         self.validation_dir = os.path.join(self.dataset_dir, "validation")
-        tmp = len(list(os.walk(os.path.join(root_dir, "Weights/TinyVGG")))[0][1])
-        self.checkpoint_path = os.path.join(root_dir, f"Weights/TinyVGG/{tmp}", "cp-{epoch:04d}.ckpt")
+        self.cur_save_id = len(list(os.walk(save_dir))[0][1])
+        self.last_save_id = len(list(os.walk(save_dir))[0][1]) - 1
+        self.checkpoint_path = os.path.join(root_dir, "{cur_save_id}", "cp-{epoch:04d}.ckpt")
+        if self.last_save_id != -1:
+            self.last_checkpoint_path = os.path.join(root_dir, "{last_save_id}", "cp-{epoch:04d}.ckpt")
         self.batch_size = batch_size
         self.model = Sequential([
                             Conv2D(10, 3, activation="relu", input_shape=(224, 224, 3)),
@@ -72,8 +75,11 @@ class Model:
                     callbacks=[cp_callback]
         )
 
-    def load_weights(self, weights_dir):
-        self.model.load_weights(os.path.join(weights_dir, "cp-0030.ckpt"))
+    def load_weights(self):
+        if self.last_save_id == -1:
+            print("No model to load")
+            exit()
+        self.model.load_weights(os.path.join(self.last_checkpoint_path, "cp-0030.ckpt"))
 
     def get_model(self):
         return self.model
