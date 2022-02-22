@@ -10,12 +10,11 @@ from lib import Data_processing, Data_visualisation, Model
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-lm', '--loadmodel', help="load model", type=bool, required=True)
+    parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')
 
     args = parser.parse_args()
 
     loadmodel = args.loadmodel
-
     return loadmodel
 
 
@@ -39,7 +38,6 @@ if __name__ == "__main__":
     if loadmodel:
         print("Je suis dans loadmodel", loadmodel)
         process_data.get_train_test_validation_csv()
-        process_data.print_dataset_directory()
         Model.load_weights(root_dir + "Weights/TinyVGG/0/")
         model = Model.get_model()
         Data_visualisation.predictImage(os.path.join(r"image_reduce_size\060002_1_028450_FEMALE_30.jpg"), model)
@@ -48,8 +46,7 @@ if __name__ == "__main__":
         Data_visualisation.predictImage(os.path.join(r"image_reduce_size\060002_4_028450_FEMALE_30.jpg"), model)
     
     else:
+        print("a")
         # process_data.test_train_validation_split_from_csv()
-        process_data.get_train_test_validation_csv()
-        process_data.create_train_test_validation_folder()
-        process_data.print_dataset_directory()
-        Model.fit_model()
+        # process_data.create_train_test_validation_folder()
+        # Model.fit_model()

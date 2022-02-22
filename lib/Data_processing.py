@@ -1,6 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
+
 import os
 import random
 import shutil
@@ -13,9 +14,11 @@ class Data_processing:
     def __init__(self, csv_filename, images_dir, dataset_dir, train_test_validation_ratio=(0.75, 0.15, 0.1)):
         self.data = pd.read_csv(csv_filename)
         self.images_dir = images_dir
-        self.dataset_dir = dataset_dir
+        tmp = len(list(os.walk(dataset_dir))[0][1])
+        self.dataset_dir = os.path.join(dataset_dir, f"{tmp}")
         self.train_test_validation_ratio = train_test_validation_ratio
         self.classes = self.data["TYPE"].unique()
+        self.__create_dataset_dir()
 
     def test_train_validation_split_from_csv(self, data_ratio=1):
         """
@@ -105,14 +108,14 @@ class Data_processing:
         for e in validation_args:
             self.__copy_image(e)
 
-    def __create_dataset_dir(self, classes):
+    def __create_dataset_dir(self):
         """
         create folders train, test and validation in the directory, and this 3 folders, a folder for each classes
         :param dst_dir: the directory
         :param classes: list of classes
         """
         for e in ["train", "test", "validation"]:
-            for c in classes:
+            for c in self.classes:
                 os.makedirs(self.dataset_dir + '/' + e + '/' + str(c))
                 print(self.dataset_dir + '/' + e + '/' + str(c))
 
