@@ -1,22 +1,21 @@
+from genericpath import isdir
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
-from tensorflow.keras.optimizers import Adam, SGD
 import os
 
 class Model:
 
-    def __init__(self, root_dir, dataset_dir, save_dir, batch_size=32):
+    def __init__(self, root_dir, dataset_dir, batch_size=32):
         self.dataset_dir = dataset_dir
         self.train_dir = os.path.join(self.dataset_dir, "train") 
         self.test_dir = os.path.join(self.dataset_dir, "test")
         self.validation_dir = os.path.join(self.dataset_dir, "validation")
-        self.cur_save_id = len(list(os.walk(save_dir))[0][1])
-        self.last_save_id = len(list(os.walk(save_dir))[0][1]) - 1
-        self.checkpoint_path = os.path.join(root_dir, "{cur_save_id}", "cp-{epoch:04d}.ckpt")
+        self.weights_dir = os.path.join(self.dataset_dir, "weights")
+        self.cur_save_id = len(list(os.walk(self.weights_dir))[0][1])
+        self.last_save_id = len(list(os.walk(self.weights_dir))[0][1]) - 1
         if self.last_save_id != -1:
-            self.last_checkpoint_path = os.path.join(root_dir, "{last_save_id}", "cp-{epoch:04d}.ckpt")
+            self.last_checkpoint_path = os.path.join(self.weights_dir, f"{self.last_save_id}", "cp-{epoch:04d}.ckpt")
+        self.checkpoint_path = os.path.join(self.weights_dir, f"{self.cur_save_id}", "cp-{epoch:04d}.ckpt")
         self.batch_size = batch_size
 
     def create_compile_model(self):
@@ -67,7 +66,7 @@ class Model:
             save_freq="epoch"
         )
         self.history = self.model.fit(self.train_data,
-                    epochs=30, 
+                    epochs=5, 
                     steps_per_epoch=len(self.train_data), 
                     validation_data=self.test_data, 
                     validation_steps=len(self.test_data),
