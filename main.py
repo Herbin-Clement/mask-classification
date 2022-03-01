@@ -33,13 +33,13 @@ if __name__ == "__main__":
     process_data = Data_processing.Data_processing(csv_pathname, image_dir, dataset_dir)
     print("dataset_dir", dataset_dir)
     print("image_dir", image_dir)
-    Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
-
     if newdataset:
         print("Create new dataset ...")
         process_data.create_dataset_dir()
         process_data.test_train_validation_split_from_csv(data_ratio=0.01)
         process_data.create_train_test_validation_folder()
+    Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
+
 
     if loadmodel:
         print("Load model ...")

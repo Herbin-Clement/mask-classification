@@ -42,6 +42,7 @@ class Data_processing:
             else:
                 self.validation_df = self.validation_df.append(
                     self.data.iloc[i], ignore_index=True)
+        self.save_csv()
         return self.train_df, self.test_df, self.validation_df
 
     def get_train_test_validation_csv(self):
