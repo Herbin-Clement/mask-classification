@@ -18,19 +18,6 @@ class Model:
         if self.last_save_id != -1:
             self.last_checkpoint_path = os.path.join(root_dir, "{last_save_id}", "cp-{epoch:04d}.ckpt")
         self.batch_size = batch_size
-        self.model = Sequential([
-                            Conv2D(10, 3, activation="relu", input_shape=(224, 224, 3)),
-                            Conv2D(10, 3, activation="relu"),
-                            MaxPool2D(pool_size=2),
-                            Conv2D(10, 3, activation="relu"),
-                            Conv2D(10, 3, activation="relu"),
-                            MaxPool2D(pool_size=2),
-                            Flatten(),
-                            Dense(4, activation="softmax")
-        ])
-        self.model.compile(loss="categorical_crossentropy",
-                    optimizer=Adam(),
-                    metrics=["accuracy"])
 
     def __get_images(self):
         train_datagen = ImageDataGenerator(
