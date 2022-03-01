@@ -4,6 +4,7 @@
 import cv2
 import os
 
+from lib import Data_visualisation, Model
 
 image = 0 # compteur d'image
 capture_fodler = 'image_capture' # non du dossier destination
@@ -30,7 +31,11 @@ def detect(gray, frame, ret):
         if ret:
             image_name = "./" + capture_fodler + '/image_' + str(image) + ".jpg" # non de l'image
             cv2.imwrite(image_name, clear_image) # on capture l'image
+
+            #passade dans le model
+
             image+=1
+
         else:
             break
         cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)

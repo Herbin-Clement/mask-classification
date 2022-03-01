@@ -1,5 +1,4 @@
-import numpy as np
-import matplotlib.pyplot as plt
+from msilib.schema import Error
 import pandas as pd
 
 import os
@@ -17,7 +16,6 @@ class Data_processing:
         self.dataset_dir = dataset_dir
         self.train_test_validation_ratio = train_test_validation_ratio
         self.classes = self.data["TYPE"].unique()
-        self.__create_dataset_dir()
 
     def test_train_validation_split_from_csv(self, data_ratio=1):
         """
@@ -110,22 +108,27 @@ class Data_processing:
         for e in validation_args:
             self.__copy_image(e)
 
-    def __create_dataset_dir(self):
+    def create_dataset_dir(self):
         """
         create folders train, test and validation in the directory, and this 3 folders, a folder for each classes
         :param dst_dir: the directory
         :param classes: list of classes
         """
+        if os.path.isdir(self.dataset_dir):
+            shutil.rmtree(self.dataset_dir)
         for e in ["train", "test", "validation"]:
             for c in self.classes:
                 os.makedirs(self.dataset_dir + '/' + e + '/' + str(c))
                 print(self.dataset_dir + '/' + e + '/' + str(c))
-
         os.makedirs(os.path.join(self.dataset_dir, "weights"))
+        os.makedirs(os.path.join(self.dataset_dir, "csv"))
 
     def __copy_image(self, src_dst):
         """
         copy the image from source to destination
         :param src_dst: tuple with source and destination
         """
-        copy2(src_dst[0], src_dst[1])
+        try:
+            copy2(src_dst[0], src_dst[1])
+        except FileNotFoundError:
+            print("Pas trouver d'image")

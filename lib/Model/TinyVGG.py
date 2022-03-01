@@ -1,9 +1,15 @@
 from lib.Model.Model import Model
 
+import tensorflow as tf 
+from  tensorflow.keras.models import Sequential
+from  tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense
+from tensorflow.keras.optimizers import Adam, SGD
+
 class TinyVGG(Model):
 
-    def __init__(self, root_dir, dataset_dir, save_dir, batch_size=32):
-        Model.__init__(root_dir, dataset_dir, save_dir, batch_size)
+    def __init__(self, root_dir, dataset_dir, batch_size=32):
+        Model.__init__(self, root_dir, dataset_dir, batch_size)
+        self.compile_model()
 
     def compile_model(self):
         self.model = Sequential([

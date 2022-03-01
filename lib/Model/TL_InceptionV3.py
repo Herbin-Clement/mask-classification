@@ -6,6 +6,7 @@ class Tl_InceptionV3(Model):
 
     def __init__(self, root_dir, dataset_dir, save_dir, batch_size=32):
         Model.__init__(root_dir, dataset_dir, save_dir, batch_size)
+        self.compile_model()
 
     def compile_model(self):
         """
