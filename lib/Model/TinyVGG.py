@@ -1,4 +1,4 @@
-from Model import Model
+from lib.Model import Model
 
 class TinyVGG(Model):
 

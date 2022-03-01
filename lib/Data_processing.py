@@ -47,6 +47,9 @@ class Data_processing:
         return self.train_df, self.test_df, self.validation_df
 
     def get_train_test_validation_csv(self):
+        """
+        load train, test and validation csv
+        """
         self.train_df = pd.read_csv(os.path.join(self.dataset_dir, "train.csv"))
         self.test_df = pd.read_csv(os.path.join(self.dataset_dir, "test.csv"))
         self.validation_df = pd.read_csv(os.path.join(self.dataset_dir, "validation.csv"))

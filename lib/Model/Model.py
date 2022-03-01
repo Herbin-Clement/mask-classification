@@ -19,7 +19,16 @@ class Model:
             self.last_checkpoint_path = os.path.join(root_dir, "{last_save_id}", "cp-{epoch:04d}.ckpt")
         self.batch_size = batch_size
 
-    def __get_images(self):
+    def create_compile_model(self):
+        """
+        create and compile the model with keras
+        """
+        pass
+
+    def __load_images(self):
+        """
+        load images with ImageDataGenerator,and pre-process them with normalization, rescale, shift, zoom and rotation
+        """
         train_datagen = ImageDataGenerator(
             rescale=1./255,
             height_shift_range=0.1,
@@ -47,7 +56,10 @@ class Model:
         )
     
     def fit_model(self):
-        self.__get_images()
+        """
+        fit the model
+        """
+        self.__load_images()
         cp_callback = tf.keras.callbacks.ModelCheckpoint(
             filepath=self.checkpoint_path,
             verbose=1,
@@ -63,10 +75,25 @@ class Model:
         )
 
     def load_weights(self):
+        """
+        load the last model weights
+        """
         if self.last_save_id == -1:
             print("No model to load")
             exit()
         self.model.load_weights(os.path.join(self.last_checkpoint_path, "cp-0030.ckpt"))
 
     def get_model(self):
+        """
+        return the tensorflow model
+        """
         return self.model
+
+    def get_history(self):
+        """
+        get the model history
+        """
+        if hasattr(self, "history"):
+            return self.history
+        else:
+            print("no history save !")

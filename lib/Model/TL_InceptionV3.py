@@ -1,6 +1,6 @@
 from tensorflow.keras.applications.inception_v3 import InceptionV3
 
-from Model import Model
+from lib.Model import Model
 
 class Tl_InceptionV3(Model):
 
@@ -8,6 +8,9 @@ class Tl_InceptionV3(Model):
         Model.__init__(root_dir, dataset_dir, save_dir, batch_size)
 
     def compile_model(self):
+        """
+        create and compile the model with keras
+        """
         pre_trained_model = InceptionV3(input_shape=(224, 224, 3),
                                 include_top = False,
                                 weights = 'imagenet')

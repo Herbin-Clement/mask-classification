@@ -13,7 +13,6 @@ def displayRandomImage(df, image_directory):
 
     :param df:
     :image_directory: the path of the image directory
-    
     """
     random_index = randint(0, len(df))
     image = df.iloc[random_index]
@@ -53,7 +52,7 @@ def predictImage(path_directory, model, verbose=True):
   """
   predict the class of an image
   :param path_directory: str
-  :param model:model 
+  :param model: model 
   """
   img = tf.keras.utils.load_img(path_directory,  target_size=(224, 224))
   img_array = tf.keras.utils.img_to_array(img)

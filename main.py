@@ -4,9 +4,14 @@ import os
 import argparse
 import shutil
 
-# from lib import Data_processing, Data_visualisation, Model
+from lib import Data_processing, Data_visualisation, Model
 
 def parse_args():
+    """
+    parse the arguments
+
+    :rtype: bool, bool
+    """
     parser = argparse.ArgumentParser()
     parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')    
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
@@ -16,7 +21,12 @@ def parse_args():
     newdataset = args.newdataset
     return loadmodel, newdataset
 
-def new_dataset(root_dir, dataset_dir):
+def new_dataset(dataset_dir):
+    """
+    remove the last dataset and create the new directory
+
+    :param dataset_dir: the dataset folder 
+    """
     shutil.rmtree(dataset_dir)
     for e in ["train", "test", "validation"]:
         for c in [0, 1, 2, 3]:
@@ -37,7 +47,7 @@ if __name__ == "__main__":
     csv_pathname = os.path.join(root_dir, "csv/df_part_7.csv")
     
     process_data = Data_processing.Data_processing(csv_pathname, image_dir, dataset_dir)
-    Model = Model.Model(root_dir, dataset_dir, save_dir, batch_size=32)
+    Model = Model.TinyVGG(root_dir, dataset_dir, save_dir, batch_size=32)
 
     if newdataset:
         new_dataset(root_dir, data_dir)
