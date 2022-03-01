@@ -54,6 +54,13 @@ class Data_processing:
         self.test_df = pd.read_csv(os.path.join(self.dataset_dir, "test.csv"))
         self.validation_df = pd.read_csv(os.path.join(self.dataset_dir, "validation.csv"))
 
+
+    def save_csv(self): 
+        csv_folder = os.path.join(self.dataset_dir, "csv")
+        self.train_df.to_csv(os.path.join(csv_folder, "train_csv"))
+        self.test_df.to_csv(os.path.join(csv_folder, "test_csv"))
+        self.validation_df.to_csv(os.path.join(csv_folder, "validation_csv"))
+
     def remove_set(self):
         """
         remove the directory and all files and folder inside
