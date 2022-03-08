@@ -87,6 +87,9 @@ class Model:
             exit()
         self.model.load_weights(os.path.join(self.last_checkpoint_path, "cp-0005.ckpt"))
 
+    def load_weights(self, path):
+        self.model.load_weights(path)
+
     def get_model(self):
         """
         return the tensorflow model

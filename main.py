@@ -4,6 +4,7 @@ import argparse
 from lib import Data_processing, Data_visualisation
 from lib.Model.TinyVGG import TinyVGG
 from lib.Model.TL_InceptionV3 import TL_InceptionV3
+from lib.video_capture.face_recognition import detect_from_video
 
 def parse_args():
     """
@@ -39,18 +40,20 @@ if __name__ == "__main__":
         process_data.create_dataset_dir()
         process_data.test_train_validation_split_from_csv(data_ratio=1)
         process_data.create_train_test_validation_folder()
-    # Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
-    Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
+    Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
+    # Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
 
 
     if loadmodel:
         print("Load model ...")
-        Model.load_weights()
+        # Model.load_weights()
+        Model.load_weights(os.path.join("Trained_weights/TinyVGG", "cp-0030.ckpt"))
         model = Model.get_model()
-        Data_visualisation.predictImage(os.path.join(r"resize_image\060002_1_028450_FEMALE_30.jpg"), model)
-        Data_visualisation.predictImage(os.path.join(r"resize_image\060002_2_028450_FEMALE_30.jpg"), model)
-        Data_visualisation.predictImage(os.path.join(r"resize_image\060002_3_028450_FEMALE_30.jpg"), model)
-        Data_visualisation.predictImage(os.path.join(r"resize_image\060002_4_028450_FEMALE_30.jpg"), model)
+        detect_from_video(model)
+        # Data_visualisation.predictImage(os.path.join(r"resize_image/000010_1_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predictImage(os.path.join(r"resize_image/000010_2_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predictImage(os.path.join(r"resize_image/000010_3_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predictImage(os.path.join(r"resize_image/000010_4_000010_MALE_24.jpg"), model)
     
     else:
         print("Training new model ...")
