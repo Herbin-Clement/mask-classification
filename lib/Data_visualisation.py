@@ -57,8 +57,6 @@ def predict_validation_image(path_directory, model, verbose=True):
   img = tf.keras.utils.load_img(path_directory,  target_size=(224, 224))
   img_array = tf.keras.utils.img_to_array(img)
   img_array = tf.expand_dims(img_array, 0)
-  print("pred_load_jpg")
-  print(img_array)
   pred = np.argmax(model.predict(img_array)) + 1
   split_path = os.path.split(path_directory)
   label = split_path[len(split_path) - 1].split("_")[1]

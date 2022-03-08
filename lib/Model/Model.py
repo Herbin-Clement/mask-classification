@@ -78,6 +78,8 @@ class Model:
                     callbacks=[cp_callback]
         )
 
+        self.save_model()
+
     def load_weights(self):
         """
         load the last model weights
@@ -104,3 +106,9 @@ class Model:
             return self.history
         else:
             print("no history save !")
+
+    def save_model(self):
+        self.model.save(os.path.join(self.root_dir, "save_model", f"{type(self).__name__}"));
+
+    def load_model(self):
+        self.model = tf.keras.models.load_model(os.path.join(self.root_dir, "save_model", f"{type(self).__name__}"));
