@@ -1,6 +1,8 @@
 import cv2
 import os
 
+from gpg import Data
+
 from lib import Data_visualisation
 
 image = 0 # compteur d'image
@@ -16,13 +18,17 @@ def detect(gray, frame, model, width, height):
         x, y, w, h = update_edge_face(x, y, w, h, width, height, 100, 100)
         roi_color = frame[y:y+h, x:x+h]
         image_name = "./" + capture_fodler + '/image_' + str(image) + ".jpg" # non de l'image
-        cv2.imwrite(image_name, roi_color) # on capture l'image
+        image_name2 = "./" + capture_fodler + '/image_' + str(image) + "_1.jpg" # non de l'image
+        image_name3 = "./" + capture_fodler + '/image_' + str(image) + "_2.jpg" # non de l'image
+        cv2.imwrite(image_name, roi_color)
         _, i = Data_visualisation.predict_validation_image(image_name, model, verbose=False)
+        i2 = Data_visualisation.predict_image(roi_color, model, image_name2, image_name3)
         font = cv2.FONT_HERSHEY_SIMPLEX
-        text = ["BIEN", "NEZ", "NUL", "NO MASQUE"]
-        cv2.putText(frame, text[i-1], (10,450), font, 3, (0, 255, 0), 2, cv2.LINE_AA)
+        text = ["1", "2", "3", "4"]
+        cv2.putText(frame, text[i-1], (x, y), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
+        cv2.putText(frame, "jpg_" + text[i2-1], (x + w, y), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
         image+=1
-        cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        # cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
     return frame
 
 def detect_from_video(model):

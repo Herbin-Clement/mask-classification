@@ -1,11 +1,11 @@
 from random import randint
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
-import pandas as pd
 import tensorflow as tf 
 import numpy as np
 import os
-
+import cv2
+from keras.preprocessing.image import save_img
 
 def displayRandomImage(df, image_directory):
     """
@@ -56,10 +56,29 @@ def predict_validation_image(path_directory, model, verbose=True):
   """
   img = tf.keras.utils.load_img(path_directory,  target_size=(224, 224))
   img_array = tf.keras.utils.img_to_array(img)
-  img_array = tf.expand_dims(img_array, 0) 
+  img_array = tf.expand_dims(img_array, 0)
+  print("pred_load_jpg")
+  print(img_array)
   pred = np.argmax(model.predict(img_array)) + 1
   split_path = os.path.split(path_directory)
   label = split_path[len(split_path) - 1].split("_")[1]
   if verbose:
     print(f"The model predict class {pred} and the class is {label} for {path_directory}")
   return label, pred
+
+def predict_image(image, model, image_name, image_name2, verbose=True):
+  cv2.imwrite(image_name, image)
+  image = cv2.resize(image, (224, 224))
+  # cv2.imwrite(image_name, image)
+  # image_rgb = cv2.cvtColor(image, cv2.COLOR_BAYER_BG2BGR)
+  tensor = tf.convert_to_tensor(image, dtype=tf.float32)
+  b, g, r = tf.unstack(tensor, axis=-1)
+  tensor = tf.stack([r, g, b], axis=-1)
+  tensor = tf.expand_dims(tensor, 0)
+  save_img(image_name2, tensor[0])
+  print("pred_no_load_img")
+  print(tensor)
+  pred = np.argmax(model.predict(tensor)) + 1
+  if verbose:
+    print(f"The model predict class {pred}")
+  return pred
