@@ -27,21 +27,27 @@ class Data_processing:
         :return: the 3 DataFrames
         """
         train_ratio, test_ratio, validation_ratio = self.train_test_validation_ratio
-        self.train_df = pd.DataFrame(columns=self.data.columns)
-        self.test_df = pd.DataFrame(columns=self.data.columns)
-        self.validation_df = pd.DataFrame(columns=self.data.columns)
+        train = list()
+        test = list()
+        validation = list()
         nb_data = int(self.data.shape[0] * data_ratio)
         for i in range(nb_data):
             random_number = random.random()
             if random_number <= train_ratio:
-                self.train_df = self.train_df.append(
-                    self.data.iloc[i], ignore_index=True)
+                # self.train_df = self.train_df.append(
+                #     self.data.iloc[i], ignore_index=True)
+                train.append(self.data.iloc[i])
             elif random_number > train_ratio and random_number <= train_ratio + test_ratio:
-                self.test_df = self.test_df.append(
-                    self.data.iloc[i], ignore_index=True)
+                # self.test_df = self.test_df.append(
+                #     self.data.iloc[i], ignore_index=True)
+                test.append(self.data.iloc[i])
             else:
-                self.validation_df = self.validation_df.append(
-                    self.data.iloc[i], ignore_index=True)
+                # self.validation_df = self.validation_df.append(
+                #     self.data.iloc[i], ignore_index=True)
+                validation.append(self.data.iloc[i])
+        self.train_df = pd.DataFrame.from_records(train)
+        self.test_df = pd.DataFrame.from_records(test)
+        self.validation_df = pd.DataFrame.from_records(validation)
         self.save_csv()
         return self.train_df, self.test_df, self.validation_df
 
@@ -128,7 +134,7 @@ class Data_processing:
             for c in self.classes:
                 os.makedirs(self.dataset_dir + '/' + e + '/' + str(c))
                 print(self.dataset_dir + '/' + e + '/' + str(c))
-        os.makedirs(os.path.join(self.dataset_dir, "weights"))
+        # os.makedirs(os.path.join(self.dataset_dir, "weights"))
         os.makedirs(os.path.join(self.dataset_dir, "csv"))
 
     def __copy_image(self, src_dst):

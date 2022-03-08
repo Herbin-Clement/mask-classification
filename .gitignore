@@ -1,3 +1,5 @@
 dataset/
 image_reduce_size/
 __pycache__/
+weights/
+resize_image/

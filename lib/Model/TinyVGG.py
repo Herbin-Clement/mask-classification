@@ -12,6 +12,9 @@ class TinyVGG(Model):
         self.compile_model()
 
     def compile_model(self):
+        """
+        create and compile the model with keras
+        """
         self.model = Sequential([
                     Conv2D(10, 3, activation="relu", input_shape=(224, 224, 3)),
                     Conv2D(10, 3, activation="relu"),

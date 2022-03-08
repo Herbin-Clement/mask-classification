@@ -1,11 +1,14 @@
 from tensorflow.keras.applications.inception_v3 import InceptionV3
+from tensorflow.keras.layers import Flatten, Dense, Dropout
+from tensorflow.keras.optimizers import Adam
+from tensorflow.keras import Model as kModel
 
-from lib.Model import Model
+from lib.Model.Model import Model
 
-class Tl_InceptionV3(Model):
+class TL_InceptionV3(Model):
 
-    def __init__(self, root_dir, dataset_dir, save_dir, batch_size=32):
-        Model.__init__(root_dir, dataset_dir, save_dir, batch_size)
+    def __init__(self, root_dir, dataset_dir, nb_epochs=10, batch_size=32):
+        Model.__init__(self, root_dir, dataset_dir, nb_epochs=nb_epochs, batch_size=batch_size)
         self.compile_model()
 
     def compile_model(self):
@@ -17,15 +20,15 @@ class Tl_InceptionV3(Model):
                                 weights = 'imagenet')
 
         for layer in pre_trained_model.layers:
-        layer.trainable = False
+            layer.trainable = False
 
         x = Flatten()(pre_trained_model.output)
         x = Dense(128, activation='relu')(x)
         x = Dropout(0.2)(x)
         x = Dense(4, activation="softmax")(x)
 
-        model = Model(pre_trained_model.input, x)
+        self.model = kModel(pre_trained_model.input, x)
 
-        model.compile(optimizer=Adam(),
+        self.model.compile(optimizer=Adam(),
                     loss="categorical_crossentropy",
                     metrics=["accuracy"])

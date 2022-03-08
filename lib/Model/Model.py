@@ -1,21 +1,26 @@
 from genericpath import isdir
+from logging import root
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import os
 
 class Model:
 
-    def __init__(self, root_dir, dataset_dir, batch_size=32):
+    def __init__(self, root_dir, dataset_dir, nb_epochs=10, batch_size=32):
+        self.root_dir = root_dir
         self.dataset_dir = dataset_dir
         self.train_dir = os.path.join(self.dataset_dir, "train") 
         self.test_dir = os.path.join(self.dataset_dir, "test")
         self.validation_dir = os.path.join(self.dataset_dir, "validation")
-        self.weights_dir = os.path.join(self.dataset_dir, "weights")
+        self.weights_dir = os.path.join(self.root_dir, "weights", type(self).__name__)
+        if not os.path.isdir(self.weights_dir):
+            os.makedirs(self.weights_dir)
         self.cur_save_id = len(list(os.walk(self.weights_dir))[0][1])
         self.last_save_id = len(list(os.walk(self.weights_dir))[0][1]) - 1
         if self.last_save_id != -1:
-            self.last_checkpoint_path = os.path.join(self.weights_dir, f"{self.last_save_id}", "cp-{epoch:04d}.ckpt")
+            self.last_checkpoint_path = os.path.join(self.weights_dir, f"{self.last_save_id}")
         self.checkpoint_path = os.path.join(self.weights_dir, f"{self.cur_save_id}", "cp-{epoch:04d}.ckpt")
+        self.nb_epochs = nb_epochs
         self.batch_size = batch_size
 
     def create_compile_model(self):
@@ -66,7 +71,7 @@ class Model:
             save_freq="epoch"
         )
         self.history = self.model.fit(self.train_data,
-                    epochs=5, 
+                    epochs=self.nb_epochs, 
                     steps_per_epoch=len(self.train_data), 
                     validation_data=self.test_data, 
                     validation_steps=len(self.test_data),
@@ -80,7 +85,7 @@ class Model:
         if self.last_save_id == -1:
             print("No model to load")
             exit()
-        self.model.load_weights(os.path.join(self.last_checkpoint_path, "cp-0030.ckpt"))
+        self.model.load_weights(os.path.join(self.last_checkpoint_path, "cp-0005.ckpt"))
 
     def get_model(self):
         """
