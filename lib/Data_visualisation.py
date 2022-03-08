@@ -48,7 +48,7 @@ def print_loss_accuracy(history):
   plt.xlabel("Epochs")
   plt.legend()
 
-def predictImage(path_directory, model, verbose=True):
+def predict_validation_image(path_directory, model, verbose=True):
   """
   predict the class of an image
   :param path_directory: str
