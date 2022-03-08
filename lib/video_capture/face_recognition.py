@@ -8,7 +8,6 @@ from lib import Data_visualisation
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
 def detect(gray, frame, model, width, height):
-    global image
     faces = face_cascade.detectMultiScale(gray, 1.3, 5)
     for (x, y, w, h) in faces:
         # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
@@ -18,7 +17,6 @@ def detect(gray, frame, model, width, height):
         font = cv2.FONT_HERSHEY_SIMPLEX
         text = ["1", "2", "3", "4"]
         cv2.putText(frame, text[pred-1], (x, y), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
-        image+=1
         cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
     return frame
 
