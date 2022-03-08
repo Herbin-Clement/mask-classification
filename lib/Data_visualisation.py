@@ -66,18 +66,12 @@ def predict_validation_image(path_directory, model, verbose=True):
     print(f"The model predict class {pred} and the class is {label} for {path_directory}")
   return label, pred
 
-def predict_image(image, model, image_name, image_name2, verbose=True):
-  cv2.imwrite(image_name, image)
+def predict_image(image, model, verbose=True):
   image = cv2.resize(image, (224, 224))
-  # cv2.imwrite(image_name, image)
-  # image_rgb = cv2.cvtColor(image, cv2.COLOR_BAYER_BG2BGR)
   tensor = tf.convert_to_tensor(image, dtype=tf.float32)
   b, g, r = tf.unstack(tensor, axis=-1)
   tensor = tf.stack([r, g, b], axis=-1)
   tensor = tf.expand_dims(tensor, 0)
-  save_img(image_name2, tensor[0])
-  print("pred_no_load_img")
-  print(tensor)
   pred = np.argmax(model.predict(tensor)) + 1
   if verbose:
     print(f"The model predict class {pred}")
