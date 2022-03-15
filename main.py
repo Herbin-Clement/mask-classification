@@ -3,8 +3,8 @@ import argparse
 
 from lib import Data_processing, Data_visualisation
 from lib.Model.TinyVGG import TinyVGG
-from lib.Model.TL_InceptionV3 import TL_InceptionV3
-from lib.Model.TinyVGG_grey import TinyVGG_grey
+# from lib.Model.TL_InceptionV3 import TL_InceptionV3
+# from lib.Model.TinyVGG_grey import TinyVGG_grey
 from lib.video_capture.face_recognition import detect_from_video
 
 def parse_args():
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         process_data.create_train_test_validation_folder()
     Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
     # Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
-    Model = TinyVGG_grey(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
+    # Model = TinyVGG_grey(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
 
 
     if loadmodel:
@@ -54,15 +54,15 @@ if __name__ == "__main__":
         # Model.save_model()
         # Model.load_model()
         detect_from_video(model)
-        Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_1_000010_MALE_24.jpg"), model)
-        Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_2_000010_MALE_24.jpg"), model)
-        Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_3_000010_MALE_24.jpg"), model)
-        Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_4_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_1_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_2_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_3_000010_MALE_24.jpg"), model)
+        # Data_visualisation.predict_validation_image(os.path.join(r"resize_image/000010_4_000010_MALE_24.jpg"), model)
     
     else:
         print("Training new model ...")
         Model.fit_model()
-        model = Model.get_model()
+        # model = Model.get_model()
         # Data_visualisation.predict_validation_image(os.path.join(r"resize_image\060002_1_028450_FEMALE_30.jpg"), model)
         # Data_visualisation.predict_validation_image(os.path.join(r"resize_image\060002_2_028450_FEMALE_30.jpg"), model)
         # Data_visualisation.predict_validation_image(os.path.join(r"resize_image\060002_3_028450_FEMALE_30.jpg"), model)

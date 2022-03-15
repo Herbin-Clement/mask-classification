@@ -1,5 +1,6 @@
 from genericpath import isdir
 from logging import root
+from typing import overload
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import os
@@ -22,6 +23,9 @@ class Model:
         self.checkpoint_path = os.path.join(self.weights_dir, f"{self.cur_save_id}", "cp-{epoch:04d}.ckpt")
         self.nb_epochs = nb_epochs
         self.batch_size = batch_size
+
+    def a(self):
+        print("hello")
 
     def create_compile_model(self):
         """

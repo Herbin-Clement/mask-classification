@@ -145,6 +145,7 @@ class Data_processing:
         :param src_dst: tuple with source and destination
         """
         try:
+            print(src_dst[0])
             copy2(src_dst[0], src_dst[1])
         except FileNotFoundError:
             print("Pas trouver d'image")
