@@ -60,6 +60,9 @@ class Data_processing:
 
 
     def save_csv(self): 
+        """
+        save train, test and validation csv in self.dataset_dir/csv
+        """
         csv_folder = os.path.join(self.dataset_dir, "csv")
         self.train_df.to_csv(os.path.join(csv_folder, "train_csv"))
         self.test_df.to_csv(os.path.join(csv_folder, "test_csv"))

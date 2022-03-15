@@ -108,7 +108,19 @@ class Model:
             print("no history save !")
 
     def save_model(self):
-        self.model.save(os.path.join(self.root_dir, "save_model", f"{type(self).__name__}"));
+        """
+        save the model in './save_model/{classname}'
+        """
+        path = os.path.join(self.root_dir, "save_model", f"{type(self).__name__}")
+        self.model.save(path);
 
     def load_model(self):
-        self.model = tf.keras.models.load_model(os.path.join(self.root_dir, "save_model", f"{type(self).__name__}"));
+        """
+        load the model from './save_model/{classname}'
+        """
+        path = os.path.join(self.root_dir, "save_model", f"{type(self).__name__}")
+        if os.path.isdir(path):
+            self.model = tf.keras.models.load_model(path)
+        else:
+            print("File not found")
+            exit()

@@ -15,7 +15,8 @@ def detect(gray, frame, model, width, height):
         roi_color = frame[y:y+h, x:x+h]
         pred = Data_visualisation.predict_image(roi_color, model, verbose=True)
         font = cv2.FONT_HERSHEY_SIMPLEX
-        text = ["1", "2", "3", "4"]
+        # text = ["1", "2", "3", "4"]
+        text = ["BIEN", "TON NEZ", "TA BOUCHE", "PAS DE MASQUE"]
         cv2.putText(frame, text[pred-1], (x, y), font, 1, (0, 255, 0), 2, cv2.LINE_AA)
         cv2.rectangle(frame, (x, y), (x+w, y+h), (255, 0, 0), 2)
     return frame
