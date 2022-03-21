@@ -9,7 +9,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 class TinyVGG_grey(Model):
 
     def __init__(self, root_dir, dataset_dir, nb_epochs=10, batch_size=32):
-        Model.__init__(self, root_dir, dataset_dir, nb_epochs, batch_size)
+        super().__init__(self, root_dir, dataset_dir, nb_epochs, batch_size)
         self.compile_model()
 
     def __load_images(self):
@@ -63,23 +63,23 @@ class TinyVGG_grey(Model):
                     optimizer=Adam(),
                     metrics=["accuracy"])
     
-    def fit_model(self):
-        """
-        fit the model
-        """
-        self.__load_images()
-        cp_callback = tf.keras.callbacks.ModelCheckpoint(
-            filepath=self.checkpoint_path,
-            verbose=1,
-            save_weights_only=True,
-            save_freq="epoch"
-        )
-        self.history = self.model.fit(self.train_data,
-                    epochs=self.nb_epochs, 
-                    steps_per_epoch=len(self.train_data), 
-                    validation_data=self.test_data, 
-                    validation_steps=len(self.test_data),
-                    callbacks=[cp_callback]
-        )
+    # def fit_model(self):
+    #     """
+    #     fit the model
+    #     """
+    #     self.__load_images()
+    #     cp_callback = tf.keras.callbacks.ModelCheckpoint(
+    #         filepath=self.checkpoint_path,
+    #         verbose=1,
+    #         save_weights_only=True,
+    #         save_freq="epoch"
+    #     )
+    #     self.history = self.model.fit(self.train_data,
+    #                 epochs=self.nb_epochs, 
+    #                 steps_per_epoch=len(self.train_data), 
+    #                 validation_data=self.test_data, 
+    #                 validation_steps=len(self.test_data),
+    #                 callbacks=[cp_callback]
+    #     )
 
-        self.save_model()
+    #     self.save_model()

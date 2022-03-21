@@ -1,8 +1,6 @@
 import cv2
 import os
 
-from gpg import Data
-
 from lib import Data_visualisation
     
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
