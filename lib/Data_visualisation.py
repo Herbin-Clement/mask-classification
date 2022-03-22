@@ -53,6 +53,37 @@ def print_loss_accuracy(history):
     plt.xlabel("Epochs")
     plt.legend()
 
+    plt.show()
+
+def save_loss_accuracy(history, save_folder, name):
+    """
+    plot loss and accuracy data of a model which is train
+    :param history: dict
+    """
+    print(history)
+    loss = history["loss"]
+    val_loss = history["val_loss"]
+    accuracy = history["accuracy"]
+    val_accuracy = history["val_accuracy"]
+
+    epochs = range(len(loss))
+
+    plt.plot(epochs, loss, label="Train loss")
+    plt.plot(epochs, val_loss, label="Test loss")
+    plt.title("Loss")
+    plt.xlabel("Epochs")
+    plt.legend()
+
+    plt.figure()
+
+    plt.plot(epochs, accuracy, label="Train accuracy")
+    plt.plot(epochs, val_accuracy, label="Test accuracy")
+    plt.title("Accuracy")
+    plt.xlabel("Epochs")
+    plt.legend()
+
+    plt.savefig(os.path.join(save_folder, f"{name}_loss_accuracy.png"))
+
 
 def predict_validation_image(path_directory, model, verbose=True):
     """
@@ -83,7 +114,7 @@ def predict_image(image, model, verbose=True):
         print(f"The model predict class {pred}")
     return pred
 
-def confusion_matrix(validation_folder, model):
+def confusion_matrix(validation_folder, model, save_folder, name):
     y_true = []
     y_pred = []
     count = 0
@@ -99,11 +130,11 @@ def confusion_matrix(validation_folder, model):
     for i in range(0, len(y_true)):
         print(f"{type(y_true[i])} {type(y_pred[i])}")
 
-    make_confusion_matrix(y_true, y_pred, classes=[str(i) for i in range(1, 5)])
+    make_confusion_matrix(y_true, y_pred, save_folder, classes=[str(i) for i in range(1, 5)], name=name)
 
 
 
-def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15):
+def make_confusion_matrix(y_true, y_pred, save_folder, classes=None, figsize=(10, 10), text_size=15, name="None"):
     # Create the confustion matrix
     print("make_confusion_matrix")
     cm = c_matrix(y_true, y_pred)
@@ -149,4 +180,4 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
                  color="white" if cm[i, j] > threshold else "black",
                  size=text_size)
 
-    plt.show()
+    plt.savefig(os.path.join(save_folder, f"{name}_confusion_matrix.png"))

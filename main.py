@@ -40,9 +40,9 @@ if __name__ == "__main__":
     if newdataset:
         print("Create new dataset ...")
         process_data.create_dataset_dir()
-        process_data.test_train_validation_split_from_csv(data_ratio=1)
+        process_data.test_train_validation_split_from_csv(data_ratio=0.01)
         process_data.create_train_test_validation_folder()
-    Model = TinyVGG(root_dir, dataset_dir, batch_size=32)
+    Model = TinyVGG(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
     # Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
     # Model = TinyVGG_grey(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
 
@@ -60,6 +60,6 @@ if __name__ == "__main__":
         # Model.load_model()
     
     else:
-        # print("Training new model ...")
+        print("Training new model ...")
         Model.fit_model()
         # model = Model.get_model()
