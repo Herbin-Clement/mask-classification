@@ -7,7 +7,7 @@ import numpy as np
 import os
 import cv2
 import itertools
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import confusion_matrix as c_matrix
 from keras.preprocessing import image
 
 
@@ -69,7 +69,7 @@ def predict_validation_image(path_directory, model, verbose=True):
     if verbose:
         print(
             f"The model predict class {pred} and the class is {label} for {path_directory}")
-    return label, pred
+    return int(label), pred
 
 
 def predict_image(image, model, verbose=True):
@@ -84,22 +84,30 @@ def predict_image(image, model, verbose=True):
     return pred
 
 def confusion_matrix(validation_folder, model):
-    images = []
     y_true = []
     y_pred = []
+    count = 0
     for classes in range(1, 5):
+        print(classes)
         for img in os.listdir(os.path.join(validation_folder, str(classes))):
+            count+=1
+            print(count)
             img = os.path.join(validation_folder, str(classes), img)
             label, pred = predict_validation_image(img, model, verbose=False)
             y_true.append(label)
             y_pred.append(pred)
-    make_confusion_matrix(y_true, y_pred, [str(i) for i in range(1, 5)])
+    for i in range(0, len(y_true)):
+        print(f"{type(y_true[i])} {type(y_pred[i])}")
+
+    make_confusion_matrix(y_true, y_pred, classes=[str(i) for i in range(1, 5)])
 
 
 
 def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15):
     # Create the confustion matrix
-    cm = confusion_matrix(y_true, y_pred)
+    print("make_confusion_matrix")
+    cm = c_matrix(y_true, y_pred)
+    print(cm)
     cm_norm = cm.astype("float") / \
         cm.sum(axis=1)[:, np.newaxis]  # normalize it
     n_classes = cm.shape[0]  # find the number of classes we're dealing with
@@ -140,3 +148,5 @@ def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_s
                  horizontalalignment="center",
                  color="white" if cm[i, j] > threshold else "black",
                  size=text_size)
+
+    plt.show()
