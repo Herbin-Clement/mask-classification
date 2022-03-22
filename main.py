@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # Model.load_weights()
         Model.load_weights(os.path.join("Trained_weights/TinyVGG", "cp-0030.ckpt"))
         model = Model.get_model()
-        Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"))
+        Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model)
         # Model.save_model()
         # Model.load_model()
         # detect_from_video(model)

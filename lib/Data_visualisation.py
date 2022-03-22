@@ -1,4 +1,5 @@
 from random import randint
+from tokenize import String
 import matplotlib.image as mpimg
 import matplotlib.pyplot as plt
 import tensorflow as tf
@@ -82,18 +83,19 @@ def predict_image(image, model, verbose=True):
         print(f"The model predict class {pred}")
     return pred
 
-def confusion_matrix(validation_folder, model, y_true):
-      images = []
-      for img in os.listdir(validation_folder):
-            img = os.path.join(validation_folder, img)
-            img = image.load_img(img, target_size=(224, 224))
-            img = image.img_to_array(img)
-            img = np.expand_dims(img, axis=0)
-            images.append(img)
+def confusion_matrix(validation_folder, model):
+    images = []
+    y_true = []
+    y_pred = []
+    for classes in range(1, 5):
+        for img in os.listdir(os.path.join(validation_folder, str(classes))):
+            img = os.path.join(validation_folder, str(classes), img)
+            label, pred = predict_validation_image(img, model, verbose=False)
+            y_true.append(label)
+            y_pred.append(pred)
+    make_confusion_matrix(y_true, y_pred, [str(i) for i in range(1, 5)])
 
-      images = np.vstack(images)
-      classes = model.predict(images)
-      print(classes)
+
 
 def make_confusion_matrix(y_true, y_pred, classes=None, figsize=(10, 10), text_size=15):
     # Create the confustion matrix
