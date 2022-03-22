@@ -30,13 +30,15 @@ class FaceRecognition():
 
         width  = vcap.get(cv2.CAP_PROP_FRAME_WIDTH)
         height = vcap.get(cv2.CAP_PROP_FRAME_HEIGHT)
-        
+
         while True:
             _, frame = vcap.read()
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             canvas = self.detect(gray, frame, width, height)
             cv2.imshow('Video', canvas)
             if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            if cv2.getWindowProperty('Video', cv2.WND_PROP_VISIBLE) <1:
                 break
         vcap.release()
         cv2.destroyAllWindows()
