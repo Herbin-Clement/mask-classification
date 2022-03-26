@@ -26,7 +26,7 @@ def parse_args():
     parser.add_argument('-I', '--InceptionV3', help='InceptionV3 model', action='store_true')
     parser.add_argument('-R', '--Resnet', help='Resnet model', action='store_true')
     parser.add_argument('-X', '--Xception', help='Xception model', action='store_true')
-    
+    args = parser.parse_args()
 
     if args.TinyVGG :
         model = TinyVGG
