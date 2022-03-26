@@ -18,7 +18,7 @@ def parse_args():
     :rtype: bool, bool
     """
      
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(prog="main.py", add_help=False, usage='%(prog)s ([-lm] or [-nd]) ([-lm] or [-nd] or [-T] or [-V] or [-I] or [-R] or [-X])')
     parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')    
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
     parser.add_argument('-T', '--TinyVGG', help='TinyVGG model', action='store_true')
@@ -26,7 +26,12 @@ def parse_args():
     parser.add_argument('-I', '--InceptionV3', help='InceptionV3 model', action='store_true')
     parser.add_argument('-R', '--Resnet', help='Resnet model', action='store_true')
     parser.add_argument('-X', '--Xception', help='Xception model', action='store_true')
-    args = parser.parse_args()
+    
+    try:
+        args = parser.parse_args()
+    except:
+        parser.print_help()
+        exit(1)
 
     if args.TinyVGG :
         model = TinyVGG
@@ -76,7 +81,7 @@ if __name__ == "__main__":
             m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))   
         except FileNotFoundError :
                 print("No model train !")
-                exit()
+                exit(1)
         model = m.get_model()
         #Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model, root_dir, "test")
     
