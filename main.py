@@ -62,7 +62,7 @@ if __name__ == "__main__":
         process_data.create_dataset_dir()
         process_data.test_train_validation_split_from_csv(data_ratio=0.01)
         process_data.create_train_test_validation_folder()
-    m = TinyVGG(root_dir, dataset_dir, batch_size=32)
+    m = Model(root_dir, dataset_dir, batch_size=32)
     # Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
     # Model = TinyVGG_grey(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
 
@@ -70,18 +70,18 @@ if __name__ == "__main__":
         print("Load model ...")
         #try:
         dir_name = os.path.join("Trained_weights",  type(m).__name__)
-        print(dir_name)
+        # print(dir_name)
         files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
-        print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
+        # print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
         
-        m.load_weights(os.path.join("Trained_weights/TinyVGG", "cp-0030.ckpt"))    
+        m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))   
         # except:
         #     print("No model train")
         #     exit()
         # Model.load_weights(os.path.join("weights/TL_IimnceptionV3", "0", "cp-0012.ckpt"))
         
         model = m.get_model()
-        #Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model)
+        Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model, root_dir, "test")
     
     else:
         print("Training new model ...")
