@@ -1,6 +1,7 @@
 from ast import Try
 import os, fnmatch
 import argparse
+from unittest import expectedFailure
 
 from lib import Data_processing, Data_visualisation
 from lib.Model.TinyVGG import TinyVGG
@@ -16,6 +17,7 @@ def parse_args():
 
     :rtype: bool, bool
     """
+     
     parser = argparse.ArgumentParser()
     parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')    
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
@@ -24,13 +26,13 @@ def parse_args():
     parser.add_argument('-I', '--InceptionV3', help='InceptionV3 model', action='store_true')
     parser.add_argument('-R', '--Resnet', help='Resnet model', action='store_true')
     parser.add_argument('-X', '--Xception', help='Xception model', action='store_true')
-    args = parser.parse_args()
+    
 
     if args.TinyVGG :
         model = TinyVGG
     elif args.VGG19 : 
         model = TL_VGG19
-    elif args.IncetpionV3 : 
+    elif args.InceptionV3 : 
         model = TL_InceptionV3
     elif args.Resnet : 
         model = TL_Resnet
@@ -63,25 +65,20 @@ if __name__ == "__main__":
         process_data.test_train_validation_split_from_csv(data_ratio=0.01)
         process_data.create_train_test_validation_folder()
     m = Model(root_dir, dataset_dir, batch_size=32)
-    # Model = TL_InceptionV3(root_dir, dataset_dir, batch_size=32, nb_epochs=50)
-    # Model = TinyVGG_grey(root_dir, dataset_dir, batch_size=32, nb_epochs=5)
 
     if loadmodel:
         print("Load model ...")
-        #try:
-        dir_name = os.path.join("Trained_weights",  type(m).__name__)
-        # print(dir_name)
-        files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
-        # print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
-        
-        m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))   
-        # except:
-        #     print("No model train")
-        #     exit()
-        # Model.load_weights(os.path.join("weights/TL_IimnceptionV3", "0", "cp-0012.ckpt"))
-        
+        try:
+            dir_name = os.path.join("Trained_weights",  type(m).__name__)
+            # print(dir_name)
+            files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
+            print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
+            m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))   
+        except FileNotFoundError :
+                print("No model train !")
+                exit()
         model = m.get_model()
-        Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model, root_dir, "test")
+        #Data_visualisation.confusion_matrix(os.path.join(dataset_dir, "validation"), model, root_dir, "test")
     
     else:
         print("Training new model ...")
