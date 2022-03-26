@@ -7,8 +7,8 @@ from tensorflow.keras.optimizers import Adam, SGD
 
 class TinyVGG(Model):
 
-    def __init__(self, root_dir, dataset_dir, batch_size=32):
-        Model.__init__(self, root_dir, dataset_dir, batch_size)
+    def __init__(self, root_dir, dataset_dir, nb_epochs=10, batch_size=32):
+        Model.__init__(self, root_dir, dataset_dir, nb_epochs=nb_epochs, batch_size=batch_size)
         self.compile_model()
 
     def compile_model(self):

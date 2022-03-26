@@ -1,6 +1,4 @@
-from genericpath import isdir
-from logging import root
-from typing import overload
+from lib.Data_visualisation import confusion_matrix, make_confusion_matrix, save_loss_accuracy
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import tensorflow as tf
 import os
@@ -14,6 +12,9 @@ class Model:
         self.test_dir = os.path.join(self.dataset_dir, "test")
         self.validation_dir = os.path.join(self.dataset_dir, "validation")
         self.weights_dir = os.path.join(self.root_dir, "weights", type(self).__name__)
+        self.save_dir = os.path.join(self.root_dir, "images")
+        if not os.path.isdir(self.save_dir):
+            os.makedirs(self.save_dir)
         if not os.path.isdir(self.weights_dir):
             os.makedirs(self.weights_dir)
         self.cur_save_id = len(list(os.walk(self.weights_dir))[0][1])
@@ -23,9 +24,6 @@ class Model:
         self.checkpoint_path = os.path.join(self.weights_dir, f"{self.cur_save_id}", "cp-{epoch:04d}.ckpt")
         self.nb_epochs = nb_epochs
         self.batch_size = batch_size
-
-    def a(self):
-        print("hello")
 
     def create_compile_model(self):
         """
@@ -82,7 +80,9 @@ class Model:
                     callbacks=[cp_callback]
         )
 
+        save_loss_accuracy(self.history.history, self.save_dir, type(self).__name__)
         self.save_model()
+        confusion_matrix(self.validation_dir, self.model, self.save_dir, type(self).__name__)
 
     def load_weights(self):
         """
