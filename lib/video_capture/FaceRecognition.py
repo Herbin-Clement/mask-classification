@@ -12,6 +12,16 @@ class FaceRecognition():
         self.model = model
 
     def detect(self, gray, frame, width, height):
+        '''
+        detect from a image if there are faces.
+
+        :param gray:
+        :param frame: image
+        :param width: width of the image
+        :param height: height of the image 
+        
+        :return: the final image with a prediction if a face is detect 
+        '''
         faces = self.face_cascade.detectMultiScale(gray, 1.3, 5)
         for (x, y, w, h) in faces:
             # cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
@@ -26,6 +36,9 @@ class FaceRecognition():
         return frame
 
     def detect_from_video(self):
+        '''
+        Launch the camera and analyse the video
+        '''
         vcap = cv2.VideoCapture(0)
 
         width  = vcap.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -45,6 +58,18 @@ class FaceRecognition():
         cv2.waitKey(1)
 
     def update_edge_face(self, x, y, w, h, width, height, shiftX, shiftY):
+        '''
+        :param x: x coordinate     
+        :param y: y coordinate
+        :param w: width of square 
+        :param h: height of the square 
+        :param shiftX:
+        :param ShiftY:
+        :param width: width of the frame
+        :param height: height of the frame
+
+        rtype: tuple
+        '''
         x = x - shiftX // 2
         y = y - shiftY // 2
         w = w + shiftX
