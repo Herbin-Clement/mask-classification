@@ -34,7 +34,7 @@ Un dossier **lib/** qui contient les fichiers python:
 - **lib/Data_visualisation.py** est un fichier qui permet de visualiser les résultats ou les données.
 - **lib/resize_image.py** est un fichier qui permet de redimensionner les images.
 
-<img src="images/UML.png" alt="UML" width="800">
+<img src="images/UML.png" alt="UML" width="800  ">
 
 
 ## **Résultats**
@@ -56,6 +56,15 @@ Nous pouvons voir que ce modèle à toujours des difficultés à différencier u
 <img src="images/TL_VGG19_confusion_matrix.png" alt="TL_VGG19_confusion_matrix" width="400">
 <img src="images/TL_VGG19_loss_accuracy.png" alt="TL_VGG19_loss_accuracy" width="400">  <br/>
 Nous pouvons voir que ce modèle à aussi des difficultés à différencier un masque en dessous du visage et pas de masque.
+
+## Pour tester
+Pour tester le programme, vous pouvez faire:
+```bash
+python3 main.py -lm -T # Charge le modèle TinyVGG et lance la caméra
+python3 main.py -lm -C # Charge le modèle Conv4Pool et lance la caméra
+```
+
+Le modèle VGG19 ne pourras pas être utilisé étant donné que le fichier des poids est trop volumineux pour l'archive.
 
 ### Sources
 - https://www.kaggle.com/tapakah68/medical-masks-part1/
