@@ -4,12 +4,9 @@ import argparse
 from unittest import expectedFailure
 
 from lib import Data_processing, Data_visualisation
-from lib.Model.TinyVGG import TinyVGG
 from lib.video_capture.FaceRecognition import FaceRecognition
-from lib.Model.TL_InceptionV3 import TL_InceptionV3
+from lib.Model.TinyVGG import TinyVGG
 from lib.Model.TL_VGG19 import TL_VGG19
-from lib.Model.TL_Resnet import TL_Resnet
-from lib.Model.TL_Xception import TL_XCeption
 from lib.Model.Conv4Pool import Conv4Pool
 
 def parse_args():
@@ -26,9 +23,6 @@ def parse_args():
     parser.add_argument('-T', '--TinyVGG', help='TinyVGG model', action='store_true')
     parser.add_argument('-C', '--Conv4Pool', help='Conv4Pool model', action='store_true')
     parser.add_argument('-V', '--VGG19', help='TinyVGG19 model', action='store_true')
-    parser.add_argument('-I', '--InceptionV3', help='InceptionV3 model', action='store_true')
-    parser.add_argument('-R', '--Resnet', help='Resnet model', action='store_true')
-    parser.add_argument('-X', '--Xception', help='Xception model', action='store_true')
     
     try:
         args = parser.parse_args()
@@ -42,12 +36,6 @@ def parse_args():
         model = Conv4Pool
     elif args.VGG19 : 
         model = TL_VGG19
-    elif args.InceptionV3 : 
-        model = TL_InceptionV3
-    elif args.Resnet : 
-        model = TL_Resnet
-    elif args.Xception :
-        model = TL_XCeption
     else : 
         model = TinyVGG
 
