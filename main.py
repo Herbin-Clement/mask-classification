@@ -10,6 +10,7 @@ from lib.Model.TL_InceptionV3 import TL_InceptionV3
 from lib.Model.TL_VGG19 import TL_VGG19
 from lib.Model.TL_Resnet import TL_Resnet
 from lib.Model.TL_Xception import TL_XCeption
+from lib.Model.Conv4Pool import Conv4Pool
 
 def parse_args():
     """
@@ -22,6 +23,7 @@ def parse_args():
     parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')    
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
     parser.add_argument('-T', '--TinyVGG', help='TinyVGG model', action='store_true')
+    parser.add_argument('-C', '--Conv4Pool', help='Conv4Pool model', action='store_true')
     parser.add_argument('-V', '--VGG19', help='TinyVGG19 model', action='store_true')
     parser.add_argument('-I', '--InceptionV3', help='InceptionV3 model', action='store_true')
     parser.add_argument('-R', '--Resnet', help='Resnet model', action='store_true')
@@ -35,6 +37,8 @@ def parse_args():
 
     if args.TinyVGG :
         model = TinyVGG
+    elif args.Conv4Pool :
+        model = Conv4Pool
     elif args.VGG19 : 
         model = TL_VGG19
     elif args.InceptionV3 : 
@@ -74,11 +78,11 @@ if __name__ == "__main__":
     if loadmodel:
         print("Load model ...")
         try:
-            dir_name = os.path.join("Trained_weights",  type(m).__name__)
+            dir_name = os.path.join("weights",  type(m).__name__, "0")
             # print(dir_name)
             files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
             print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
-            m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))   
+            m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
         except FileNotFoundError :
                 print("No model train !")
                 exit(1)
