@@ -78,12 +78,12 @@ if __name__ == "__main__":
     if loadmodel:
         print("Load model ...")
         try:
-            dir_name = os.path.join("weights",  type(m).__name__, "0")
-            # print(dir_name)
+            dir_model_name = os.path.join("weights",  type(m).__name__,)
+            dir_number = str(max([int(f) for f in os.listdir(dir_model_name)]))
+            dir_name = os.path.join(dir_model_name, dir_number)
             files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
-            print(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
             m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
-        except FileNotFoundError :
+        except (FileNotFoundError, ValueError) :
                 print("No model train !")
                 exit(1)
         model = m.get_model()
