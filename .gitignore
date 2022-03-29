@@ -1,7 +1,6 @@
 dataset/
 image_reduce_size/
 __pycache__/
-weights/
 resize_image/
 image_capture/
 Trained_weights/InceptionV3/
