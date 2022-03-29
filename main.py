@@ -16,7 +16,7 @@ def parse_args():
     :rtype: bool, bool
     """
      
-    parser = argparse.ArgumentParser(prog="main.py", add_help=False, usage='%(prog)s ([-lm] or [-nd]) ([-lm] or [-nd] or [-T] or [-V] or [-I] or [-R] or [-X])')
+    parser = argparse.ArgumentParser(prog="main.py", add_help=False, usage='%(prog)s ([-lm] or [-lmm] [-nd]) ([-lm] or [-nd] or [-T] or [-V] or [-C])')
     parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')
     parser.add_argument('-lmm', '--loadmodelManualy', help="choose the save of a  model", action='store_true')  
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
@@ -94,7 +94,6 @@ if __name__ == "__main__":
         try:
             dir_model_name = os.path.join("weights",  type(m).__name__,)
             path = weight_directory_path(dir_model_name, loadmodel_m)
-            print(path)
             m.load_weights(path)
         except (FileNotFoundError, ValueError) :
                 print("No model train !")
@@ -105,7 +104,7 @@ if __name__ == "__main__":
     else:
         print("Training new model ...")
         Model.fit_model()
-        # model = Model.get_model()
+        model = Model.get_model()
 
     camera = FaceRecognition(model)
     camera.detect_from_video()
