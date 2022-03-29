@@ -28,7 +28,34 @@ Un dossier **dataset/** est créer, et contient 4 différents dossier:
 - Un dossier **dataset/validation/**, qui contient toutes les images qui vont servir à générer la matrice de confusion pour voir les résultats obtenu d'un modèle.  
 
 Un dossier **lib/** qui contient les fichiers python:
--
+- **lib/Model/** contient les différents modèles.
+- **lib/video_capture/** contient les fichiers requies pour la capture d'image.
+- **lib/Data_processing.py** est un fichier qui gère la mise en place des datasets.
+- **lib/Data_visualisation.py** est un fichier qui permet de visualiser les résultats ou les données.
+- **lib/resize_image.py** est un fichier qui permet de redimensionner les images.
+
+<img src="images/UML.png" alt="UML" width="800">
+
+
+## **Résultats**
+Nous avons utilisé 3 modèles différents:
+- TinyVGG
+- Conv4Pool
+- VGG19 avec du Transfert Learning
+### **TinyVGG**
+<img src="images/TinyVGG_confusion_matrix.png" alt="TinyVGG_confusion_matrix" width="400">
+<img src="images/TinyVGG_loss_accuracy.png" alt="TinyVGG_loss_accuracy" width="400">  <br/>
+Nous pouvons voir que ce modèle à des difficultés à différencier un masque en dessous du visage et pas de masque.
+
+### **Conv4Pool**
+<img src="images/Conv4Pool_confusion_matrix.png" alt="Conv4Pool_confusion_matrix" width="400">
+<img src="images/Conv4Pool_loss_accuracy.png" alt="Conv4Pool_loss_accuracy" width="400">  <br/>
+Nous pouvons voir que ce modèle à toujours des difficultés à différencier un masque en dessous du visage et pas de masque, mais fonctionne beaucoup mieux que le précédent.
+
+### **TL_VGG19**
+<img src="images/TL_VGG19_confusion_matrix.png" alt="TL_VGG19_confusion_matrix" width="400">
+<img src="images/TL_VGG19_loss_accuracy.png" alt="TL_VGG19_loss_accuracy" width="400">  <br/>
+Nous pouvons voir que ce modèle à aussi des difficultés à différencier un masque en dessous du visage et pas de masque.
 
 ### Sources
 - https://www.kaggle.com/tapakah68/medical-masks-part1/
