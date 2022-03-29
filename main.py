@@ -16,8 +16,9 @@ def parse_args():
     :rtype: bool, bool
     """
      
-    parser = argparse.ArgumentParser(prog="main.py", add_help=False, usage='%(prog)s ([-lm] or [-nd]) ([-lm] or [-nd] or [-T] or [-V] or [-I] or [-R] or [-X])')
-    parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')    
+    parser = argparse.ArgumentParser(prog="main.py", add_help=False, usage='%(prog)s ([-lm] or [-lmm] [-nd]) ([-lm] or [-nd] or [-T] or [-V] or [-C])')
+    parser.add_argument('-lm', '--loadmodel', help="load model", action='store_true')
+    parser.add_argument('-lmm', '--loadmodelManualy', help="choose the save of a  model", action='store_true')  
     parser.add_argument('-nd', '--newdataset', help="newdataset", action='store_true')
     parser.add_argument('-T', '--TinyVGG', help='TinyVGG model', action='store_true')
     parser.add_argument('-C', '--Conv4Pool', help='Conv4Pool model', action='store_true')
@@ -39,12 +40,36 @@ def parse_args():
         model = TinyVGG
 
     loadmodel = args.loadmodel
+    loadmodel_m = args.loadmodelManualy
     newdataset = args.newdataset
-    return loadmodel, newdataset, model
+    return loadmodel, newdataset, model, loadmodel_m
+
+def weight_directory_path(dir_model_name, manual_selection=0):
+    list_dir = os.listdir(dir_model_name)
+    
+    if manual_selection == 1: # mode manuelle
+        print(f"{dir_model_name}/?\n")
+        for i in range(len(list_dir)):
+            print(f'\t{list_dir[0]}\n')
+        d = input("\nChoisissez un dossier : ")
+        list_files = fnmatch.filter(os.listdir(os.path.join(dir_model_name,d)),'*.index')
+        print(f"{dir_model_name}/{d}/?\n")
+        for i in range(len(list_files)):
+            print(f"\t {i} : {list_files[i]}\n")
+        f = input("\nChoisissez un fichier : ")
+        print(os.path.join(dir_model_name, d, list_files[int(f)][:-6]))
+        return os.path.join(dir_model_name, d, list_files[int(f)][:-6])
+    
+    else: #mode automatique 
+        d = str(max([int(f) for f in os.listdir(dir_model_name)]))
+        f = [int(f[3:7]) for f in fnmatch.filter(os.listdir(os.path.join(dir_model_name, d) ),'*.index')]
+        print(os.path.join(dir_model_name, d,f"cp-{max(f) :0>4d}.ckpt"))
+        return os.path.join(dir_model_name, d,f"cp-{max(f) :0>4d}.ckpt")
+
 
 if __name__ == "__main__":
     # print("Num GPUs Available: ", len(tf.config.list_physical_devices('GPU')))
-    loadmodel, newdataset, Model = parse_args()
+    loadmodel, newdataset, Model, loadmodel_m = parse_args()
     root_dir = os.path.dirname(__file__)
     absolute_root_dir = os.path.abspath(root_dir)
     image_dir = os.path.join(root_dir, "resize_image")
@@ -63,14 +88,13 @@ if __name__ == "__main__":
         process_data.create_train_test_validation_folder()
     m = Model(root_dir, dataset_dir, batch_size=32)
 
-    if loadmodel:
+    if loadmodel or loadmodel_m:
+        print(loadmodel_m)
         print("Load model ...")
         try:
             dir_model_name = os.path.join("weights",  type(m).__name__,)
-            dir_number = str(max([int(f) for f in os.listdir(dir_model_name)]))
-            dir_name = os.path.join(dir_model_name, dir_number)
-            files = [int(f[3:7]) for f in fnmatch.filter(os.listdir(dir_name),'*.index')]
-            m.load_weights(os.path.join(dir_name, f"cp-{max(files) :0>4d}.ckpt"))
+            path = weight_directory_path(dir_model_name, loadmodel_m)
+            m.load_weights(path)
         except (FileNotFoundError, ValueError) :
                 print("No model train !")
                 exit(1)
@@ -80,7 +104,7 @@ if __name__ == "__main__":
     else:
         print("Training new model ...")
         Model.fit_model()
-        # model = Model.get_model()
+        model = Model.get_model()
 
     camera = FaceRecognition(model)
     camera.detect_from_video()
